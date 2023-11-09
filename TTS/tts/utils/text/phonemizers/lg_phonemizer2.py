@@ -33,21 +33,12 @@ class LG_Phonemizer2(BasePhonemizer):
         return "lg_phonemizer"
 
     @staticmethod
-<<<<<<< HEAD
     def phonemize_lg(text: str, separator: str = "|") -> str:
         ph = luganda_text_to_phonemes2(text, separator)
         return ph
 
     def _phonemize(self, text, separator):
         return self.phonemize_lg(text, separator)
-=======
-    def phonemize_lg(text: str) -> str:
-        ph = luganda_text_to_phonemes2(text)
-        return ph
-
-    def _phonemize(self, text):
-        return self.phonemize_lg(text)
->>>>>>> 08e8813552132bd9868ba508e24babd4e181d2ab
 
     @staticmethod
     def supported_languages() -> Dict:
