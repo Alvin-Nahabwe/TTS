@@ -39,6 +39,27 @@ _abbreviations = {
             ("ft", "fort"),
         ]
     ],
+    "lg": [
+        (re.compile("\\b%s\\." % x[0], re.IGNORECASE), x[1])
+        for x in [
+            ("mrs", "misess"),
+            ("mr", "mister"),
+            ("dr", "omusawo"),
+            ("st", "omutukuvu"),
+            ("co", "kampane"),
+            ("jr", "junior"),
+            ("maj", "major"),
+            ("gen", "general"),
+            ("drs", "abasawo"),
+            ("rev", "reverend"),
+            ("lt", "lieutenant"),
+            ("hon", "ow'ekitiibwa"),
+            ("sgt", "saajenti"),
+            ("capt", "kapiteeni"),
+            ("ltd", "limited"),
+            ("col", "colonel"),
+        ]
+    ],
     "es": [
         (re.compile("\\b%s\\." % x[0], re.IGNORECASE), x[1])
         for x in [
@@ -191,6 +212,18 @@ _symbols_multilingual = {
             ("%", " percent "),
             ("#", " hash "),
             ("$", " dollar "),
+            ("£", " pound "),
+            ("°", " degree "),
+        ]
+    ],
+    "lg": [
+        (re.compile(r"%s" % re.escape(x[0]), re.IGNORECASE), x[1])
+        for x in [
+            ("&", " ne "),
+            ("@", " ku "),
+            ("%", " percent "),
+            ("#", " hash "),
+            ("$", " ddoola "),
             ("£", " pound "),
             ("°", " degree "),
         ]
@@ -381,6 +414,7 @@ def expand_symbols_multilingual(text, lang="en"):
 
 _ordinal_re = {
     "en": re.compile(r"([0-9]+)(st|nd|rd|th)"),
+    "lg": re.compile(r"([0-9]+)(st|nd|rd|th)"),
     "es": re.compile(r"([0-9]+)(º|ª|er|o|a|os|as)"),
     "fr": re.compile(r"([0-9]+)(º|ª|er|re|e|ème)"),
     "de": re.compile(r"([0-9]+)(st|nd|rd|th|º|ª|\.(?=\s|$))"),
@@ -432,6 +466,7 @@ def _expand_currency(m, lang="en", currency="USD"):
 
     and_equivalents = {
         "en": ", ",
+        "lg": ", ",
         "es": " con ",
         "fr": " et ",
         "de": " und ",
@@ -467,7 +502,7 @@ def expand_numbers_multilingual(text, lang="en"):
     if lang == "zh" or lang == "zh-cn":
         text = zh_num2words()(text)
     else:
-        if lang in ["en", "ru"]:
+        if lang in ["en", "ru", "lg"]:
             text = re.sub(_comma_number_re, _remove_commas, text)
         else:
             text = re.sub(_dot_number_re, _remove_dots, text)
@@ -530,7 +565,8 @@ def korean_cleaners(text):
     return r.translit(text)
 
 
-DEFAULT_VOCAB_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../data/tokenizer.json")
+# DEFAULT_VOCAB_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../data/tokenizer.json")
+DEFAULT_VOCAB_FILE = "/home/ubuntu/tts/tokenizer.json"
 
 
 class VoiceBpeTokenizer:
@@ -540,6 +576,7 @@ class VoiceBpeTokenizer:
             self.tokenizer = Tokenizer.from_file(vocab_file)
         self.char_limits = {
             "en": 250,
+            "lg": 250,
             "de": 253,
             "fr": 273,
             "es": 239,
@@ -568,7 +605,7 @@ class VoiceBpeTokenizer:
             print(f"[!] Warning: The text length exceeds the character limit of {limit} for language '{lang}', this might cause truncated audio.")
 
     def preprocess_text(self, txt, lang):
-        if lang in ["en", "es", "fr", "de", "pt", "it", "pl", "ar", "cs", "ru", "nl", "tr", "zh-cn"]:
+        if lang in ["en", "lg", "es", "fr", "de", "pt", "it", "pl", "ar", "cs", "ru", "nl", "tr", "zh-cn"]:
             txt = multilingual_cleaners(txt, lang)
             if lang == "zh-cn":
                 txt = chinese_transliterate(txt)
@@ -595,7 +632,7 @@ class VoiceBpeTokenizer:
         return txt
 
     def preprocess_text(self, txt, lang):
-        if lang in ["en", "es", "fr", "de", "pt", "it", "pl", "zh", "ar", "cs", "ru", "nl", "tr", "hu"]:
+        if lang in ["en", "lg", "es", "fr", "de", "pt", "it", "pl", "zh", "ar", "cs", "ru", "nl", "tr", "hu"]:
             txt = multilingual_cleaners(txt, lang)
         elif lang == "ja":
             if self.katsu is None:
