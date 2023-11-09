@@ -214,11 +214,15 @@ class TacotronConfig(BaseTTSConfig):
     # testing
     test_sentences: List[str] = field(
         default_factory=lambda: [
-            "It took me quite a long time to develop a voice, and now that I have it I'm not going to be silent.",
-            "Be a voice, not an echo.",
-            "I'm sorry Dave. I'm afraid I can't do that.",
-            "This cake is great. It's so delicious and moist.",
-            "Prior to November 22, 1963.",
+        "omumyuka w'omukulu w'essomero yalumbiddwa",
+        "ngenda kukuleetera ekikopo ekirala",
+        "yandiddidde ekikoola ky'ejjuuni n'akifuura manvuuli ye",
+        "abasomesa baasaba abazadde ssente z'okusomesa abayizi mu luwummula",
+        "abantu bajja kufuna emirimu olwa zi pulojekiti ennyingi eziri mu kitundu",
+        "abamadi baasenguka okuva mu bitundu by'ensi eby'enjawulo",
+        "bakulaakulanira wamu era nga beeyagalira wamu mu mbeera mwe bali",
+        "ensonga ezitusindika okuyiga",
+        "kubanga mulyogerera mu bbanga"
         ]
     )
 

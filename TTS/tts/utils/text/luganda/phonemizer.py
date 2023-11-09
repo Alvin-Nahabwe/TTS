@@ -1,5 +1,9 @@
 from typing import List
 from cvutils import Phonemiser
+<<<<<<< HEAD
+=======
+import unicodedata
+>>>>>>> 08e8813552132bd9868ba508e24babd4e181d2ab
 
 p = Phonemiser('lg')
 p.lkp.update({'ng': ['ŋŋ']})
@@ -36,11 +40,20 @@ def lg2phoneme(text: str) -> str:
     return res[1:]
 
 
+<<<<<<< HEAD
 def luganda_text_to_phonemes2(text: str, seperator: str = "|") -> str:
     """Convert Luganda text to phonemes."""
     res = lg2phoneme(res)
     res = res.replace("   ", "-")
     return res.replace(" ", seperator).replace("-", seperator+" ").replace(f"{seperator}'{seperator}", "'")
+=======
+def luganda_text_to_phonemes2(text: str) -> str:
+    """Convert Luganda text to phonemes."""
+    res = unicodedata.normalize("NFKC", text)
+    res = lg2phoneme(res)
+    res = res.replace("   ", "-")
+    return res.replace(" ", "|").replace("-", "| ").replace("|'|", "'")
+>>>>>>> 08e8813552132bd9868ba508e24babd4e181d2ab
 
 
 def luganda_text_to_phonemes(text: str, seperator: str = "|") -> str:
