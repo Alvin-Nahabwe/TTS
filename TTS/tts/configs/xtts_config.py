@@ -68,6 +68,7 @@ class XttsConfig(BaseTTSConfig):
     languages: List[str] = field(
         default_factory=lambda: [
             "en",
+            "lg",
             "es",
             "fr",
             "de",
