@@ -41,6 +41,15 @@ DEF_LANG_TO_PHONEMIZER["ko-kr"] = KO_KR_Phonemizer.name()
 DEF_LANG_TO_PHONEMIZER["lg"] = LG_Phonemizer.name()
 DEF_LANG_TO_PHONEMIZER["lg2"] = LG_Phonemizer2.name()
 
+DEF_LANG_TO_PHONEMIZER["bn"] = BN_Phonemizer.name()
+DEF_LANG_TO_PHONEMIZER["be"] = BEL_Phonemizer.name()
+
+
+# JA phonemizer has deal breaking dependencies like MeCab for some systems.
+# So we only have it when we have it.
+if JA_JP_Phonemizer is not None:
+    PHONEMIZERS[JA_JP_Phonemizer.name()] = JA_JP_Phonemizer
+    DEF_LANG_TO_PHONEMIZER["ja-jp"] = JA_JP_Phonemizer.name()
 
 
 def get_phonemizer_by_name(name: str, **kwargs) -> BasePhonemizer:
@@ -65,6 +74,10 @@ def get_phonemizer_by_name(name: str, **kwargs) -> BasePhonemizer:
         return JA_JP_Phonemizer(**kwargs)
     if name == "ko_kr_phonemizer":
         return KO_KR_Phonemizer(**kwargs)
+    if name == "lg_phonemizer":
+        return LG_Phonemizer(**kwargs)
+    if name == "lg_phonemizer2":
+        return LG_Phonemizer2(**kwargs)
     if name == "bn_phonemizer":
         return BN_Phonemizer(**kwargs)
     if name == "be_phonemizer":
