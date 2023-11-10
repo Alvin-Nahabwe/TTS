@@ -20,8 +20,8 @@ OUT_PATH = "/home/ubuntu/tts/data"
 # Training Parameters
 OPTIMIZER_WD_ONLY_ON_WEIGHTS = True  # for multi-gpu training please make it False
 START_WITH_EVAL = True  # if True it will star with evaluation
-BATCH_SIZE = 32  # set here the batch size
-GRAD_ACUMM_STEPS = 8  # set here the grad accumulation steps
+BATCH_SIZE = 16  # set here the batch size
+GRAD_ACUMM_STEPS = 16  # set here the grad accumulation steps
 # Note: we recommend that BATCH_SIZE * GRAD_ACUMM_STEPS need to be at least 252 for more efficient training. You can increase/decrease BATCH_SIZE but then set GRAD_ACUMM_STEPS accordingly.
 
 # Define here the dataset that you want to use for the fine-tuning on.
@@ -113,12 +113,13 @@ def main():
         logger_uri=LOGGER_URI,
         audio=audio_config,
         batch_size=BATCH_SIZE,
-        batch_group_size=5,
+        batch_group_size=9,
         eval_batch_size=BATCH_SIZE//2,
         num_loader_workers=os.cpu_count(),
         num_eval_loader_workers=os.cpu_count(),
         eval_split_size=0.1,
         eval_split_max_size=256,
+        epochs=1000,
         print_step=100,
         plot_step=100,
         log_model_step=1000,
