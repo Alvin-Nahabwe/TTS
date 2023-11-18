@@ -626,7 +626,7 @@ DEFAULT_VOCAB_FILE = "/home/ubuntu/tts/tokenizer.json"
 
 
 class VoiceBpeTokenizer:
-    def __init__(self, vocab_file=None):
+    def __init__(self, vocab_file=DEFAULT_VOCAB_FILE):
         self.tokenizer = None
         if vocab_file is not None:
             self.tokenizer = Tokenizer.from_file(vocab_file)
