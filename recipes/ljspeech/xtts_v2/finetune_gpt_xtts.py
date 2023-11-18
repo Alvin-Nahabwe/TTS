@@ -8,7 +8,7 @@ from TTS.tts.layers.xtts.trainer.gpt_trainer import GPTArgs, GPTTrainer, GPTTrai
 from TTS.utils.manage import ModelManager
 
 # Logging parameters
-RUN_NAME = "GPT_XTTS_v2.0_Yogera"
+RUN_NAME = "GPT_XTTS_v2.0_Common_Voice"
 PROJECT_NAME = "XTTS_trainer"
 DASHBOARD_LOGGER = "wandb"
 LOGGER_URI = None
@@ -28,7 +28,7 @@ GRAD_ACUMM_STEPS = 64  # set here the grad accumulation steps
 config_dataset = BaseDatasetConfig(
     formatter="custom_formatter",
     path=OUT_PATH,
-    meta_file_train="top_spk_filtered_yogera.csv",
+    meta_file_train="best_filtered_cv.csv",
     language="lg",
 )
 
@@ -75,8 +75,10 @@ if not os.path.isfile(TOKENIZER_FILE) or not os.path.isfile(XTTS_CHECKPOINT):
 
 # Training sentences generations
 SPEAKER_REFERENCE = [
-    "/home/ubuntu/tts/data/wavs/airvoice_20221113_202317.947167-VEEAU8_162576.wav",  # speaker reference to be used in training test sentences
-    "/home/ubuntu/tts/data/wavs/airvoice_20221113_202538.129320-VNRRL2_6294.wav"
+    "/home/ubuntu/tts/data/wavs/common_voice_lg_24013035.wav",  # speaker reference to be used in training test sentences
+    "/home/ubuntu/tts/data/wavs/common_voice_lg_24015982.wav",
+    "/home/ubuntu/tts/data/wavs/common_voice_lg_24015986.wav",
+    "/home/ubuntu/tts/data/wavs/common_voice_lg_23722589.wav"
 ]
 LANGUAGE = config_dataset.language
 
@@ -115,7 +117,7 @@ def main():
         audio=audio_config,
         batch_size=BATCH_SIZE,
         batch_group_size=36,
-        eval_batch_size=BATCH_SIZE//2,
+        eval_batch_size=BATCH_SIZE,
         num_loader_workers=os.cpu_count()-2,
         num_eval_loader_workers=os.cpu_count()-4,
         eval_split_size=0.1,
@@ -123,7 +125,7 @@ def main():
         epochs=1000,
         print_step=100,
         plot_step=100,
-        log_model_step=1000,
+        log_model_step=None,
         save_step=10000,
         save_n_checkpoints=1,
         save_checkpoints=True,
@@ -133,11 +135,21 @@ def main():
         optimizer="AdamW",
         optimizer_wd_only_on_weights=OPTIMIZER_WD_ONLY_ON_WEIGHTS,
         optimizer_params={"betas": [0.9, 0.96], "eps": 1e-8, "weight_decay": 1e-2},
-        lr=5e-06,  # learning rate
+        lr=5e-08,  # learning rate
         lr_scheduler="MultiStepLR",
         # it was adjusted accordly for the new step scheme
         lr_scheduler_params={"milestones": [50000 * 18, 150000 * 18, 300000 * 18], "gamma": 0.5, "last_epoch": -1},
         test_sentences=[
+            {
+                "text": "abantu bajja kufuna emirimu olwa zi pulojekiti ennyingi eziri mu kitundu",
+                "speaker_wav": SPEAKER_REFERENCE,
+                "language": LANGUAGE,
+            },
+            {
+                "text": "ngenda kukuleetera ekikopo ekirala",
+                "speaker_wav": SPEAKER_REFERENCE,
+                "language": LANGUAGE,
+            },
             {
                 "text": "abasomesa baasaba abazadde ssente z'okusomesa abayizi mu luwummula",
                 "speaker_wav": SPEAKER_REFERENCE,
