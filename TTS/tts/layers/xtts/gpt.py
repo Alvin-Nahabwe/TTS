@@ -128,6 +128,7 @@ class GPT(nn.Module):
         self.heads = heads
         self.model_dim = model_dim
         self.max_conditioning_inputs = max_conditioning_inputs
+        self.max_gen_mel_tokens = max_mel_tokens - self.max_conditioning_inputs - 2
         self.max_mel_tokens = -1 if max_mel_tokens == -1 else max_mel_tokens + 2 + self.max_conditioning_inputs
         self.max_text_tokens = -1 if max_text_tokens == -1 else max_text_tokens + 2
         self.max_prompt_tokens = max_prompt_tokens
@@ -425,15 +426,6 @@ class GPT(nn.Module):
         if max_mel_len > audio_codes.shape[-1]:
             audio_codes = F.pad(audio_codes, (0, max_mel_len - audio_codes.shape[-1]))
 
-        silence = True
-        for idx, l in enumerate(code_lengths):
-            length = l.item()
-            while silence:
-                if audio_codes[idx, length - 1] != 83:
-                    break
-                length -= 1
-            code_lengths[idx] = length
-
         # 💖 Lovely assertions
         assert (
             max_mel_len <= audio_codes.shape[-1]
@@ -449,7 +441,9 @@ class GPT(nn.Module):
         audio_codes = F.pad(audio_codes[:, :max_mel_len], (0, 1), value=self.stop_audio_token)
 
         # Pad mel codes with stop_audio_token
-        audio_codes = self.set_mel_padding(audio_codes, code_lengths)
+        audio_codes = self.set_mel_padding(
+            audio_codes, code_lengths - 3
+        )  # -3 to get the real code lengths without consider start and stop tokens that was not added yet
 
         # Build input and target tensors
         # Prepend start token to inputs and append stop token to targets
@@ -598,7 +592,7 @@ class GPT(nn.Module):
             bos_token_id=self.start_audio_token,
             pad_token_id=self.stop_audio_token,
             eos_token_id=self.stop_audio_token,
-            max_length=self.max_mel_tokens,
+            max_length=self.max_gen_mel_tokens + gpt_inputs.shape[-1],
             **hf_generate_kwargs,
         )
         if "return_dict_in_generate" in hf_generate_kwargs:
@@ -611,7 +605,7 @@ class GPT(nn.Module):
             bos_token_id=self.start_audio_token,
             pad_token_id=self.stop_audio_token,
             eos_token_id=self.stop_audio_token,
-            max_length=self.max_mel_tokens,
+            max_length=self.max_gen_mel_tokens + fake_inputs.shape[-1],
             do_stream=True,
             **hf_generate_kwargs,
         )
