@@ -481,7 +481,7 @@ class GPTTrainer(BaseTTS):
         state = self.xtts.get_compatible_checkpoint_state_dict(checkpoint_path)
 
         # print(state["text_embedding.weight"].shape, self.xtts.gpt.text_embedding.weight.shape)
-        print(state)
+        print(state.keys())
 
         # edit xtts checkpoint if the number of tokens is changed to ensure better transfer learning
         if (
