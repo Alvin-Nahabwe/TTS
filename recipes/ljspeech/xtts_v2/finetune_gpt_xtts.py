@@ -8,7 +8,7 @@ from TTS.tts.layers.xtts.trainer.gpt_trainer import GPTArgs, GPTTrainer, GPTTrai
 from TTS.utils.manage import ModelManager
 
 # Logging parameters
-RUN_NAME = "GPT_XTTS_v2.0_Yogera"
+RUN_NAME = "GPT_XTTS_v2.0_Common_Voice"
 PROJECT_NAME = "XTTS_trainer"
 DASHBOARD_LOGGER = "wandb"
 LOGGER_URI = None
@@ -28,7 +28,7 @@ GRAD_ACUMM_STEPS = 64  # set here the grad accumulation steps
 config_dataset = BaseDatasetConfig(
     formatter="custom_formatter",
     path=OUT_PATH,
-    meta_file_train="top_spk_filtered_yogera.csv",
+    meta_file_train="top_spk_filtered_cv.csv",
     language="lg",
 )
 
@@ -75,7 +75,8 @@ if not os.path.isfile(TOKENIZER_FILE) or not os.path.isfile(XTTS_CHECKPOINT):
 
 # Training sentences generations
 SPEAKER_REFERENCE = [
-    "/home/ubuntu/tts/data/wavs/airvoice_20221015_181129.273519-VKBMW6_190239.wav"  # speaker reference to be used in training test sentences
+    "/home/ubuntu/tts/data/wavs/common_voice_lg_28504979.wav",  # speaker reference to be used in training test sentences
+    "/home/ubuntu/tts/data/wavs/common_voice_lg_28504981.wav"
 ]
 LANGUAGE = config_dataset.language
 
