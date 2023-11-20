@@ -18,7 +18,7 @@ LOGGER_URI = None
 OUT_PATH = "/home/ubuntu/tts/data"
 
 # Training Parameters
-OPTIMIZER_WD_ONLY_ON_WEIGHTS = False  # for multi-gpu training please make it False
+OPTIMIZER_WD_ONLY_ON_WEIGHTS = True  # for multi-gpu training please make it False
 START_WITH_EVAL = True  # if True it will star with evaluation
 BATCH_SIZE = 4  # set here the batch size
 GRAD_ACUMM_STEPS = 64  # set here the grad accumulation steps
