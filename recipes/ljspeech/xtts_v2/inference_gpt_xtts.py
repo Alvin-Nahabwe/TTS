@@ -15,7 +15,7 @@ SPEAKER_REFERENCE = [
     "/home/ubuntu/tts/data/wavs/common_voice_lg_24013035.wav",
 ]
 LANGUAGE = "lg"
-INFERENCE_TEXT = "abantu bajja kufuna emirimu olwa zi pulojekiti ennyingi eziri mu kitundu"
+INFERENCE_TEXT = "ngenda kukuleetera ekikopo ekirala"
 
 # output wav path
 OUTPUT_WAV_PATH = "xtts-inference.wav"
