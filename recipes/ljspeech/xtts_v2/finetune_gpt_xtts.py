@@ -28,7 +28,7 @@ GRAD_ACUMM_STEPS = 64  # set here the grad accumulation steps
 config_dataset = BaseDatasetConfig(
     formatter="custom_formatter",
     path=OUT_PATH,
-    meta_file_train="best_filtered_cv.csv",
+    meta_file_train="best_cv.csv",
     language="lg",
 )
 
@@ -76,9 +76,6 @@ if not os.path.isfile(TOKENIZER_FILE) or not os.path.isfile(XTTS_CHECKPOINT):
 # Training sentences generations
 SPEAKER_REFERENCE = [
     "/home/ubuntu/tts/data/wavs/common_voice_lg_24013035.wav",  # speaker reference to be used in training test sentences
-    "/home/ubuntu/tts/data/wavs/common_voice_lg_24015982.wav",
-    "/home/ubuntu/tts/data/wavs/common_voice_lg_24015986.wav",
-    "/home/ubuntu/tts/data/wavs/common_voice_lg_23722589.wav"
 ]
 LANGUAGE = config_dataset.language
 
@@ -122,7 +119,7 @@ def main():
         num_eval_loader_workers=os.cpu_count()-4,
         eval_split_size=0.1,
         eval_split_max_size=256,
-        epochs=1000,
+        epochs=2000,
         print_step=100,
         plot_step=100,
         log_model_step=None,
@@ -135,7 +132,7 @@ def main():
         optimizer="AdamW",
         optimizer_wd_only_on_weights=OPTIMIZER_WD_ONLY_ON_WEIGHTS,
         optimizer_params={"betas": [0.9, 0.96], "eps": 1e-8, "weight_decay": 1e-2},
-        lr=5e-08,  # learning rate
+        lr=5e-07,  # learning rate
         lr_scheduler="MultiStepLR",
         # it was adjusted accordly for the new step scheme
         lr_scheduler_params={"milestones": [50000 * 18, 150000 * 18, 300000 * 18], "gamma": 0.5, "last_epoch": -1},
