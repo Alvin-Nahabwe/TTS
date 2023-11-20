@@ -13,9 +13,6 @@ XTTS_CHECKPOINT = "/home/ubuntu/tts/data/GPT_XTTS_v2.0_Common_Voice-November-18-
 # Add here the speaker reference
 SPEAKER_REFERENCE = [
     "/home/ubuntu/tts/data/wavs/common_voice_lg_24013035.wav",
-    "/home/ubuntu/tts/data/wavs/common_voice_lg_24015982.wav",
-    "/home/ubuntu/tts/data/wavs/common_voice_lg_24015986.wav",
-    "/home/ubuntu/tts/data/wavs/common_voice_lg_23722589.wav"
 ]
 LANGUAGE = "lg"
 INFERENCE_TEXT = "abantu bajja kufuna emirimu olwa zi pulojekiti ennyingi eziri mu kitundu"
