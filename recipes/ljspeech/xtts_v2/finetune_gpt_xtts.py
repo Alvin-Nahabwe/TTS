@@ -99,7 +99,7 @@ def main():
         gpt_use_perceiver_resampler=True,
     )
     # define audio config
-    audio_config = XttsAudioConfig(sample_rate=16000, dvae_sample_rate=16000, output_sample_rate=16000)
+    audio_config = XttsAudioConfig(sample_rate=16000, dvae_sample_rate=16000, output_sample_rate=24000)
     # training parameters config
     config = GPTTrainerConfig(
         output_path=OUT_PATH,
