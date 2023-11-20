@@ -485,37 +485,48 @@ class GPTTrainer(BaseTTS):
             "gpt.text_embedding.weight" in state
             and state["gpt.text_embedding.weight"].shape != self.xtts.gpt.text_embedding.weight.shape
         ):
-            num_new_tokens = (
-                self.xtts.gpt.text_embedding.weight.shape[0] - state["gpt.text_embedding.weight"].shape[0]
-            )
-            if num_new_tokens < 0:
-                num_new_tokens = state["gpt.text_embedding.weight"].shape[0]
+            # num_new_tokens = (
+            #     self.xtts.gpt.text_embedding.weight.shape[0] - state["gpt.text_embedding.weight"].shape[0]
+            # )
+            # print(f" > Loading checkpoint with {num_new_tokens} additional tokens.")
 
-            print(f" > Loading checkpoint with {num_new_tokens} additional tokens.")
+            # # add new tokens to a linear layer (text_head)
+            # emb_g = state["gpt.text_embedding.weight"]
+            # new_row = torch.randn(num_new_tokens, emb_g.shape[1])
+            # start_token_row = emb_g[-1, :]
+            # emb_g = torch.cat([emb_g, new_row], axis=0)
+            # emb_g[-1, :] = start_token_row
+            # state["gpt.text_embedding.weight"] = emb_g
+
+            # # add new weights to the linear layer (text_head)
+            # text_head_weight = state["gpt.text_head.weight"]
+            # start_token_row = text_head_weight[-1, :]
+            # new_entry = torch.randn(num_new_tokens, self.xtts.gpt.text_head.weight.shape[1])
+            # text_head_weight = torch.cat([text_head_weight, new_entry], axis=0)
+            # text_head_weight[-1, :] = start_token_row
+            # state["gpt.text_head.weight"] = text_head_weight
+
+            # # add new biases to the linear layer (text_head)
+            # text_head_bias = state["gpt.text_head.bias"]
+            # start_token_row = text_head_bias[-1]
+            # new_bias_entry = torch.zeros(num_new_tokens)
+            # text_head_bias = torch.cat([text_head_bias, new_bias_entry], axis=0)
+            # text_head_bias[-1] = start_token_row
+            # state["gpt.text_head.bias"] = text_head_bias
+
+            num_new_tokens = self.xtts.gpt.text_embedding.weight.shape[0]
+
+            print(f" > Loading checkpoint with {num_new_tokens} tokens.")
 
             # add new tokens to a linear layer (text_head)
             emb_g = state["gpt.text_embedding.weight"]
-            new_row = torch.randn(num_new_tokens, emb_g.shape[1])
-            start_token_row = emb_g[-1, :]
-            emb_g = torch.cat([emb_g, new_row], axis=0)
-            emb_g[-1, :] = start_token_row
-            state["gpt.text_embedding.weight"] = emb_g
+            state["gpt.text_embedding.weight"] = torch.randn(num_new_tokens, emb_g.shape[1])
 
-            # add new weights to the linear layer (text_head)
-            text_head_weight = state["gpt.text_head.weight"]
-            start_token_row = text_head_weight[-1, :]
-            new_entry = torch.randn(num_new_tokens, self.xtts.gpt.text_head.weight.shape[1])
-            text_head_weight = torch.cat([text_head_weight, new_entry], axis=0)
-            text_head_weight[-1, :] = start_token_row
-            state["gpt.text_head.weight"] = text_head_weight
+            # add new weights to the linear layer (text_head)    
+            state["gpt.text_head.weight"] = torch.randn(num_new_tokens, self.xtts.gpt.text_head.weight.shape[1])
 
-            # add new biases to the linear layer (text_head)
-            text_head_bias = state["gpt.text_head.bias"]
-            start_token_row = text_head_bias[-1]
-            new_bias_entry = torch.zeros(num_new_tokens)
-            text_head_bias = torch.cat([text_head_bias, new_bias_entry], axis=0)
-            text_head_bias[-1] = start_token_row
-            state["gpt.text_head.bias"] = text_head_bias
+            # add new biases to the linear layer (text_head)  
+            state["gpt.text_head.bias"] = torch.zeros(num_new_tokens)
 
         # load the model weights
         self.xtts.load_state_dict(state, strict=strict)
