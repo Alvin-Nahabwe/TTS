@@ -38,4 +38,4 @@ out = model.inference(
     speaker_embedding,
     temperature=0.7, # Add custom parameters here
 )
-torchaudio.save(OUTPUT_WAV_PATH, torch.tensor(out["wav"]).unsqueeze(0), 16000)
+torchaudio.save(OUTPUT_WAV_PATH, torch.tensor(out["wav"]).unsqueeze(0), 24000)
