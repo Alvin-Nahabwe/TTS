@@ -485,10 +485,12 @@ class GPTTrainer(BaseTTS):
             "gpt.text_embedding.weight" in state
             and state["gpt.text_embedding.weight"].shape != self.xtts.gpt.text_embedding.weight.shape
         ):
-            num_new_tokens = max(
-                (self.xtts.gpt.text_embedding.weight.shape[0] - state["gpt.text_embedding.weight"].shape[0]),
-                0
+            num_new_tokens = (
+                self.xtts.gpt.text_embedding.weight.shape[0] - state["gpt.text_embedding.weight"].shape[0]
             )
+            if not num_new_tokens:
+                num_new_tokens = state["gpt.text_embedding.weight"].shape[0]
+                
             print(f" > Loading checkpoint with {num_new_tokens} additional tokens.")
 
             # add new tokens to a linear layer (text_head)
