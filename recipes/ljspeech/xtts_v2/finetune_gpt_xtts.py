@@ -75,7 +75,7 @@ if not os.path.isfile(TOKENIZER_FILE) or not os.path.isfile(XTTS_CHECKPOINT):
 
 # Training sentences generations
 SPEAKER_REFERENCE = [
-    "/home/ubuntu/tts/data/wavs/common_voice_lg_24013035.wav",  # speaker reference to be used in training test sentences
+    "/home/ubuntu/tts/data/wavs/common_voice_lg_24015982.wav",  # speaker reference to be used in training test sentences
 ]
 LANGUAGE = config_dataset.language
 
