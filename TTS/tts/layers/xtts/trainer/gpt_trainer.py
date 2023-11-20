@@ -486,8 +486,8 @@ class GPTTrainer(BaseTTS):
             and state["gpt.text_embedding.weight"].shape != self.xtts.gpt.text_embedding.weight.shape
         ):
             num_new_tokens = max(
-                self.xtts.gpt.text_embedding.weight.shape[0] - state["gpt.text_embedding.weight"].shape[0],
-                state["gpt.text_embedding.weight"].shape[0] - self.xtts.gpt.text_embedding.weight.shape[0]
+                (self.xtts.gpt.text_embedding.weight.shape[0] - state["gpt.text_embedding.weight"].shape[0]),
+                (state["gpt.text_embedding.weight"].shape[0] - self.xtts.gpt.text_embedding.weight.shape[0])
             )
             print(f" > Loading checkpoint with {num_new_tokens} additional tokens.")
 
