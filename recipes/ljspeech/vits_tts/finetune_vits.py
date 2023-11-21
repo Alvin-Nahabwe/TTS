@@ -47,7 +47,7 @@ characters_config = CharactersConfig(
 
 vitsArgs = VitsArgs(
     num_chars=29,
-    spec_segment_size=62,
+    spec_segment_size=32,
     num_layers_text_encoder=6,
     resblock_type_decoder="2",
     use_sdp=True,
@@ -73,7 +73,7 @@ config = VitsConfig(
     num_eval_loader_workers=12,
     precompute_num_workers=12,
     run_eval=True,
-    eval_split_size=0.01,
+    eval_split_size=0.1,
     test_delay_epochs=-1,
     epochs=5000,
     text_cleaner="english_cleaners",
