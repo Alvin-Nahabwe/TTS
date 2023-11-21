@@ -12,6 +12,12 @@ from TTS.tts.utils.speakers import SpeakerManager
 from TTS.tts.utils.text.tokenizer import TTSTokenizer
 from TTS.utils.audio import AudioProcessor
 
+# Logging parameters
+RUN_NAME = "YourTTS_CV+Yogera"
+PROJECT_NAME = "YourTTS_finetuner"
+DASHBOARD_LOGGER = "wandb"
+LOGGER_URI = None
+
 output_path = "/home/ubuntu/tts/data"
 
 dataset_config = [
@@ -20,12 +26,14 @@ dataset_config = [
         meta_file_train="top_cv.csv", 
         path=output_path, 
         language="lg", 
+        phonemizer="lg_phonemizer",
     ),
     BaseDatasetConfig(
         formatter="custom_formatter", 
         meta_file_train="top_yogera.csv", 
         path=output_path, 
         language="lg", 
+        phonemizer="lg_phonemizer",
     )
 ]
 
@@ -53,8 +61,8 @@ vitsArgs = VitsArgs(
     use_d_vector_file=True,
     d_vector_file=["/home/ubuntu/tts/speakers-cv.json", "/home/ubuntu/tts/speakers-yogera.json"],
     use_sdp=True,
-    spec_segment_size=32,
-    num_layers_text_encoder=6,
+    spec_segment_size=62,
+    num_layers_text_encoder=10,
     resblock_type_decoder="2",
     noise_scale=1.0,
     inference_noise_scale=0.3,
@@ -68,11 +76,16 @@ vitsArgs = VitsArgs(
 )
 
 config = VitsConfig(
+    run_name=RUN_NAME,
+    project_name=PROJECT_NAME,
+    run_description=""" YourTTS finetuning """,
+    dashboard_logger=DASHBOARD_LOGGER,
+    logger_uri=LOGGER_URI,
     model_args=vitsArgs,
     audio=audio_config,
-    batch_size=32,
-    eval_batch_size=16,
-    batch_group_size=8,
+    batch_size=48,
+    eval_batch_size=24,
+    batch_group_size=12,
     eval_split_size=0.1,
     precompute_num_workers=os.cpu_count()-2,
     num_loader_workers=os.cpu_count()-2,
@@ -87,6 +100,8 @@ config = VitsConfig(
     phoneme_cache_path=os.path.join(output_path, "phoneme_cache"),
     compute_input_seq_cache=False,
     print_step=250,
+    plot_step=250,
+    log_model_step=100000,
     print_eval=False,
     mixed_precision=False,
     output_path=output_path,
