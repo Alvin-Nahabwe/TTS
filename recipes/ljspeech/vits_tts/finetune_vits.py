@@ -9,10 +9,10 @@ from TTS.tts.models.vits import Vits, VitsAudioConfig, CharactersConfig, VitsArg
 from TTS.tts.utils.text.tokenizer import TTSTokenizer
 from TTS.utils.audio import AudioProcessor
 
-output_path = "/home/alvin_n256/tts/data/"
+output_path = "/home/ubuntu/tts/data/"
 
 dataset_config = [
-    BaseDatasetConfig(formatter="custom_formatter", meta_file_train="top_spk_filtered_cv.csv", path=output_path, language="lg", phonemizer="lg_phonemizer")
+    BaseDatasetConfig(formatter="custom_formatter", meta_file_train="best_cv.csv", path=output_path, language="lg", phonemizer="lg_phonemizer")
 ]
 
 audio_config = VitsAudioConfig(
@@ -35,25 +35,31 @@ characters_config = CharactersConfig(
 )
 
 vitsArgs = VitsArgs(
+    num_chars=29,
     spec_segment_size=32,
     num_layers_text_encoder=6,
-    resblock_type_decoder="1",
+    resblock_type_decoder="2",
     use_sdp=True,
+    noise_scale=1.0,
+    inference_noise_scale=0.3,
+    length_scale=1.5,
     noise_scale_dp=0.6,
     inference_noise_scale_dp=0.3,
 )
 
 config = VitsConfig(
+    model_args=vitsArgs,
     audio=audio_config,
-    batch_size=16,
-    eval_batch_size=8,
-    batch_group_size=2,
-    num_loader_workers=os.cpu_count(),
-    num_eval_loader_workers=os.cpu_count(),
+    batch_size=32,
+    eval_batch_size=16,
+    batch_group_size=8,
+    num_loader_workers=os.cpu_count()-2,
+    num_eval_loader_workers=os.cpu_count()-2,
+    precompute_num_workers=os.cpu_count()-2,
     run_eval=True,
     eval_split_size=0.1,
     test_delay_epochs=-1,
-    epochs=10000,
+    epochs=2500,
     text_cleaner="english_cleaners",
     use_phonemes=True,
     phoneme_language="lg",
@@ -66,10 +72,29 @@ config = VitsConfig(
     output_path=output_path,
     datasets=dataset_config,
     characters=characters_config,
+    use_length_weighted_sampler=True,
+    length_weighted_sampler_alpha=1.5,
     cudnn_enable=True,
     cudnn_benchmark=False,
-    lr_gen=0.000002,
-    lr_disc=0.000002,
+    use_noise_augment=False,
+    lr_gen=2e-5,
+    lr_disc=2e-5,
+    test_sentences=[
+        "abantu bajja kufuna emirimu olwa zi pulojekiti ennyingi eziri mu kitundu",
+        "ngenda kukuleetera ekikopo ekirala",
+        "abasomesa baasaba abazadde ssente z'okusomesa abayizi mu luwummula",
+        "kubanga mulyogerera mu bbanga",
+        "bwe muba mulima mukozesa nkumbi ki",
+        "nasaba dda kitange ampe we nnimira",
+        "nnasooka kunoonya ddagala kufuuyira nnyaanya nga ssinnajja",
+        "kasujja emmwanyi ze zonna yazitunze mbisi ng'anoonya ffiizi",
+        "amagye gasiima omulimu gwa bannayuganda eri eggwanga lyabwe",
+        "ebirango by'okuziika ennaku zino tebikyasomebwa nnyo",
+        "minisita w'ebyenjigiriza janet museveni annyonnyodde ku bino",
+        "biringanya tezisobola kukula bulungi nga omuddo mungi",
+        "ekiyumba ky'enkoko kibaamu kalimbwe mungi n'obukuta bw'emmwanyi",
+        "buuza abalimisa okupima asidi w'ettaka",
+        ]
 )
 
 # INITIALIZE THE AUDIO PROCESSOR
