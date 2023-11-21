@@ -31,8 +31,8 @@ audio_config = VitsAudioConfig(
     win_length=1024, 
     hop_length=256, 
     num_mels=80, 
-    mel_fmin=95, 
-    mel_fmax=6000,
+    mel_fmin=0, 
+    mel_fmax=None,
 )
 
 characters_config = CharactersConfig(
