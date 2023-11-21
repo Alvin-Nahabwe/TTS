@@ -122,7 +122,7 @@ def main():
         epochs=2000,
         print_step=100,
         plot_step=100,
-        log_model_step=None,
+        log_model_step=100000,
         save_step=10000,
         save_n_checkpoints=1,
         save_checkpoints=True,

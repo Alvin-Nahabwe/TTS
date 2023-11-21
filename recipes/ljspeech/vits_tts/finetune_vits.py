@@ -9,10 +9,21 @@ from TTS.tts.models.vits import Vits, VitsAudioConfig, CharactersConfig, VitsArg
 from TTS.tts.utils.text.tokenizer import TTSTokenizer
 from TTS.utils.audio import AudioProcessor
 
+# Logging parameters
+RUN_NAME = "VITS_Common_Voice"
+PROJECT_NAME = "VITS_finetuner"
+DASHBOARD_LOGGER = "wandb"
+LOGGER_URI = None
+
 output_path = "/home/ubuntu/tts/data/"
 
 dataset_config = [
-    BaseDatasetConfig(formatter="custom_formatter", meta_file_train="best_cv.csv", path=output_path, language="lg", phonemizer="lg_phonemizer")
+    BaseDatasetConfig(
+        formatter="custom_formatter", 
+        meta_file_train="best_cv.csv", 
+        path=output_path, language="lg", 
+        phonemizer="lg_phonemizer"
+    ),
 ]
 
 audio_config = VitsAudioConfig(
@@ -48,6 +59,11 @@ vitsArgs = VitsArgs(
 )
 
 config = VitsConfig(
+    run_name=RUN_NAME,
+    project_name=PROJECT_NAME,
+    run_description=""" VITS finetuning """,
+    dashboard_logger=DASHBOARD_LOGGER,
+    logger_uri=LOGGER_URI,
     model_args=vitsArgs,
     audio=audio_config,
     batch_size=32,
@@ -67,6 +83,8 @@ config = VitsConfig(
     phoneme_cache_path=os.path.join(output_path, "phoneme_cache"),
     compute_input_seq_cache=False,
     print_step=25,
+    plot_step=25,
+    log_model_step=100000,
     print_eval=False,
     mixed_precision=False,
     output_path=output_path,
@@ -94,7 +112,7 @@ config = VitsConfig(
         "biringanya tezisobola kukula bulungi nga omuddo mungi",
         "ekiyumba ky'enkoko kibaamu kalimbwe mungi n'obukuta bw'emmwanyi",
         "buuza abalimisa okupima asidi w'ettaka",
-        ]
+    ],
 )
 
 # INITIALIZE THE AUDIO PROCESSOR
