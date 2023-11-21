@@ -10,7 +10,7 @@ from TTS.tts.utils.text.tokenizer import TTSTokenizer
 from TTS.utils.audio import AudioProcessor
 
 # Logging parameters
-RUN_NAME = "VITS_Common_Voice"
+RUN_NAME = "VITS_Common_Voice_Best"
 PROJECT_NAME = "VITS_finetuner"
 DASHBOARD_LOGGER = "wandb"
 LOGGER_URI = None
