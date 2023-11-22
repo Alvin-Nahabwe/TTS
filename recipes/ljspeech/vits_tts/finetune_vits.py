@@ -10,7 +10,7 @@ from TTS.tts.utils.text.tokenizer import TTSTokenizer
 from TTS.utils.audio import AudioProcessor
 
 # Logging parameters
-RUN_NAME = "VITS_Common_Voice_Best"
+RUN_NAME = "VITS_Common_Voice"
 PROJECT_NAME = "VITS_finetuner"
 DASHBOARD_LOGGER = "wandb"
 LOGGER_URI = None
@@ -20,7 +20,7 @@ output_path = "/home/ubuntu/tts/data/"
 dataset_config = [
     BaseDatasetConfig(
         formatter="custom_formatter", 
-        meta_file_train="best_cv.csv", 
+        meta_file_train="top_spk_filtered_cv.csv", 
         path=output_path, language="lg", 
         phonemizer="lg_phonemizer"
     ),
@@ -47,12 +47,10 @@ characters_config = CharactersConfig(
 
 vitsArgs = VitsArgs(
     num_chars=29,
-    spec_segment_size=32,
+    spec_segment_size=62,
     num_layers_text_encoder=6,
     resblock_type_decoder="2",
     use_sdp=True,
-    noise_scale=1.0,
-    inference_noise_scale=0.3,
     length_scale=1.5,
     noise_scale_dp=0.6,
     inference_noise_scale_dp=0.3,
@@ -67,13 +65,13 @@ config = VitsConfig(
     model_args=vitsArgs,
     audio=audio_config,
     batch_size=32,
-    eval_batch_size=16,
+    eval_batch_size=8,
     batch_group_size=0,
     num_loader_workers=os.cpu_count()-2,
     num_eval_loader_workers=12,
     precompute_num_workers=12,
     run_eval=True,
-    eval_split_size=0.1,
+    eval_split_size=0.05,
     test_delay_epochs=-1,
     epochs=5000,
     text_cleaner="english_cleaners",
