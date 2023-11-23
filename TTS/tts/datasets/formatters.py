@@ -441,7 +441,7 @@ def vctk(root_path, meta_files=None, wavs_path="wav48_silence_trimmed", mic="mic
             print(f" [!] wav files don't exist - {wav_file}")
     return items
 
-def custom_formatter(root_path, manifest_file, **kwargs):  # pylint: disable=unused-argument
+def custom_formatter(root_path, manifest_file, wavs_path, **kwargs):  # pylint: disable=unused-argument
     """Assumes each line as ```<filename>|<transcription>```
     """
     txt_file = os.path.join(root_path, manifest_file)
@@ -449,7 +449,7 @@ def custom_formatter(root_path, manifest_file, **kwargs):  # pylint: disable=unu
     with open(txt_file, "r", encoding="utf-8") as ttf:
         for line in ttf:
             cols = line.split("|")
-            wav_file = os.path.join(root_path, "wavs", cols[0]+".wav")
+            wav_file = os.path.join(root_path, wavs_path, cols[0]+".wav")
             text = cols[1]
             speaker_name = cols[2]
             items.append({"text":text, "audio_file":wav_file, "speaker_name":speaker_name, "root_path": root_path})

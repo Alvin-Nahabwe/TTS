@@ -13,27 +13,22 @@ from TTS.tts.utils.text.tokenizer import TTSTokenizer
 from TTS.utils.audio import AudioProcessor
 
 # Logging parameters
-RUN_NAME = "YourTTS_CV+Yogera"
+RUN_NAME = "YourTTS_All_Preprocessed"
 PROJECT_NAME = "YourTTS_finetuner"
 DASHBOARD_LOGGER = "wandb"
 LOGGER_URI = None
 
 output_path = "/home/ubuntu/tts/data"
+wavs_path = "wavs_denoised_trimmed_normalized"
 
 dataset_config = [
     BaseDatasetConfig(
         formatter="custom_formatter", 
-        meta_file_train="top_cv.csv", 
+        meta_file_train="preprocessed_all.csv", 
         path=output_path, 
         language="lg", 
         phonemizer="lg_phonemizer",
-    ),
-    BaseDatasetConfig(
-        formatter="custom_formatter", 
-        meta_file_train="top_yogera.csv", 
-        path=output_path, 
-        language="lg", 
-        phonemizer="lg_phonemizer",
+        wavs_path=wavs_path,
     )
 ]
 
@@ -59,7 +54,7 @@ characters_config = CharactersConfig(
 vitsArgs = VitsArgs(
     num_chars=29,
     use_d_vector_file=True,
-    d_vector_file=["/home/ubuntu/tts/speakers-cv.json", "/home/ubuntu/tts/speakers-yogera.json"],
+    d_vector_file=["/home/ubuntu/tts/speakers.json"],
     use_sdp=True,
     spec_segment_size=32,
     num_layers_text_encoder=6,

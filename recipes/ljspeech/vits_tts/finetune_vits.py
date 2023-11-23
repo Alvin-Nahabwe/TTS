@@ -10,19 +10,22 @@ from TTS.tts.utils.text.tokenizer import TTSTokenizer
 from TTS.utils.audio import AudioProcessor
 
 # Logging parameters
-RUN_NAME = "VITS_Common_Voice"
+RUN_NAME = "VITS_Common_Voice_Preprocessed"
 PROJECT_NAME = "VITS_finetuner"
 DASHBOARD_LOGGER = "wandb"
 LOGGER_URI = None
 
 output_path = "/home/ubuntu/tts/data/"
+wavs_path = "wavs_denoised_trimmed_normalized"
 
 dataset_config = [
     BaseDatasetConfig(
         formatter="custom_formatter", 
         meta_file_train="top_spk_filtered_cv.csv", 
-        path=output_path, language="lg", 
-        phonemizer="lg_phonemizer"
+        path=output_path, 
+        language="lg", 
+        phonemizer="lg_phonemizer",
+        wavs_path=wavs_path
     ),
 ]
 
