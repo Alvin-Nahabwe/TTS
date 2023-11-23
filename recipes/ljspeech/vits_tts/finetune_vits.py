@@ -51,7 +51,9 @@ vitsArgs = VitsArgs(
     num_layers_text_encoder=6,
     resblock_type_decoder="2",
     use_sdp=True,
-    length_scale=1.5,
+    length_scale=2.0,
+    noise_scale=1.0,
+    inference_noise_scale=0.3,
     noise_scale_dp=0.6,
     inference_noise_scale_dp=0.3,
 )
