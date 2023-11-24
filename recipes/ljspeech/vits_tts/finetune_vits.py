@@ -32,8 +32,8 @@ audio_config = VitsAudioConfig(
     win_length=1024, 
     hop_length=256, 
     num_mels=80, 
-    mel_fmin=0, 
-    mel_fmax=None,
+    mel_fmin=95.0, 
+    mel_fmax=6000.0,
 )
 
 characters_config = CharactersConfig(
@@ -52,7 +52,7 @@ vitsArgs = VitsArgs(
     num_layers_text_encoder=6,
     resblock_type_decoder="2",
     use_sdp=True,
-    length_scale=2.0,
+    length_scale=1.0,
     noise_scale=1.0,
     inference_noise_scale=0.3,
     noise_scale_dp=0.6,
