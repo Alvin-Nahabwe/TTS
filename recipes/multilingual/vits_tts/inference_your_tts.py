@@ -83,7 +83,10 @@ SE_speaker_manager.init_encoder(
 ### Define inference variables
 
 # Get embeddings
-embeddings = [embedding['embedding'] for embedding in SE_speaker_manager.embeddings.values()]
+embeddings = list(SE_speaker_manager.embeddings.values())
+speaker_occurence = [emb['name'] for emb in embeddings]
+speakers = list(set(speaker_occurence))
+speaker_prob = [sum(np.asarray(speaker_occurence)==spk_id)/len(speaker_occurence) for spk_id in speakers]
 
 # Define inference variables
 model.length_scale = 1  # scaler for the duration predictor. The larger it is, the slower the speech.
@@ -105,13 +108,18 @@ for text in inference_texts:
   if text_length<min_text_length or text_length>max_text_length:
     inference_texts.remove(text)
 
+rng = np.random.default_rng(259891479564900423631760156541439862254)
+emb_df = pd.DataFrame(embeddings)
+
 ### Sythesis
 
 file_name = "your-tts-inference"
 datalist = []
 
 for idx, text in enumerate(inference_texts):
-    reference_emb = embeddings[np.random.randint(0, len(embeddings))]
+    spk_id = rng.choice(speakers, size=1, p=speaker_prob)[0]
+    reference_emb = emb_df.where(emb_df.name==spk_id).dropna().sample(1).embedding.tolist()[0]
+
     print(" > text: {}".format(text))
 
     wav, alignment, _, _ = synthesis(
@@ -131,7 +139,7 @@ for idx, text in enumerate(inference_texts):
     print(" > Saving output to {}".format(out_path))
     ap.save_wav(wav, out_path)
 
-    datalist.append([f"{file_name}-{str(idx)}.wav", text])
+    datalist.append([spk_id, f"{file_name}-{str(idx)}.wav", text])
 
-dataframe = pd.DataFrame(data=datalist, columns=['filename', 'transcript'])
+dataframe = pd.DataFrame(data=datalist, columns=['spk_id', 'filename', 'transcript'])
 dataframe.to_csv('/home/ubuntu/tts/data/synthesized.csv', sep='|', index=False)
