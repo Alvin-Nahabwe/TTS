@@ -20,7 +20,7 @@ from TTS.tts.utils.speakers import SpeakerManager
 
 ### Paths definition
 
-OUT_PATH = '/home/ubuntu/tts/data/wavs_synthesized'
+OUT_PATH = '/home/ubuntu/xlsr/wavs_synthesized'
 
 # create output path
 os.makedirs(OUT_PATH, exist_ok=True)
@@ -96,7 +96,7 @@ model.inference_noise_scale_dp = 0.3 # defines the noise variance applied to the
 # Choose language id
 language_id = 0
 
-with open('/home/ubuntu/tts/data/scorer-cv.txt', 'r') as inference_texts_file:
+with open('/home/ubuntu/xlsr/tests/scorer-cv.txt', 'r') as inference_texts_file:
   inference_texts = inference_texts_file.read().splitlines()
 
 min_text_length = 33
@@ -142,4 +142,4 @@ for idx, text in enumerate(inference_texts):
     datalist.append([spk_id, f"{file_name}-{str(idx)}.wav", text])
 
 dataframe = pd.DataFrame(data=datalist, columns=['spk_id', 'filename', 'transcript'])
-dataframe.to_csv('/home/ubuntu/tts/data/synthesized.csv', sep='|', index=False)
+dataframe.to_csv('/home/ubuntu/xlsr//synthesized.csv', sep='|', index=False)
