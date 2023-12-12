@@ -20,7 +20,7 @@ from TTS.tts.utils.speakers import SpeakerManager
 
 ### Paths definition
 
-OUT_PATH = '/home/ubuntu/xlsr/wavs_synthesized'
+OUT_PATH = '/home/ubuntu/xlsr/wavs_synthesized_gn'
 
 # create output path
 os.makedirs(OUT_PATH, exist_ok=True)
@@ -53,7 +53,7 @@ C.model_args['use_speaker_encoder_as_loss'] = False
 model = setup_model(C)
 model.language_manager.load_ids_from_file(TTS_LANGUAGES)
 
-cp = torch.load(MODEL_PATH, map_location=torch.device('cpu'))
+cp = torch.load(MODEL_PATH, map_location=torch.device('cuda'))
 
 # remove speaker encoder
 model_weights = cp['model'].copy()
@@ -96,7 +96,7 @@ model.inference_noise_scale_dp = 0.3 # defines the noise variance applied to the
 # Choose language id
 language_id = 0
 
-with open('/home/ubuntu/xlsr/tests/scorer-cv.txt', 'r') as inference_texts_file:
+with open('/home/ubuntu/xlsr/tests/scorer-cv-2.txt', 'r') as inference_texts_file:
   inference_texts = inference_texts_file.read().splitlines()
 
 min_text_length = 33
@@ -142,4 +142,4 @@ for idx, text in enumerate(inference_texts):
     datalist.append([spk_id, f"{file_name}-{str(idx)}.wav", text])
 
 dataframe = pd.DataFrame(data=datalist, columns=['spk_id', 'filename', 'transcript'])
-dataframe.to_csv('/home/ubuntu/xlsr//synthesized.csv', sep='|', index=False)
+dataframe.to_csv('/home/ubuntu/xlsr/synthesized_gn.csv', sep='|', index=False)
